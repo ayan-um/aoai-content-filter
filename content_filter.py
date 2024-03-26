@@ -4,20 +4,26 @@ import openai
 from openai import AzureOpenAI
 
 def getSecrets(region):
+    '''
+    This function fetches key and endpoints from secrets.csv
+    given the AOAI service region
+    '''
+
     df = pd.read_csv('secrets.csv')
     filtered_df = df[df['region'] == region]
     endpoint = filtered_df['endpoint'].iloc[0]
     key = filtered_df['key'].iloc[0]
     return key, endpoint
     
-def getAoaiResponse(prompt, key, endpoint, api_version):
+def getAoaiResponse(prompt, key, endpoint, api_version, deployment_name):
+    '''
+    This method calls the completion function of OpenAI and returns response.
+    '''
     client = AzureOpenAI(
     api_key = key,
     api_version = api_version,
     azure_endpoint = endpoint
     )
-
-    deployment_name='gpt-35-turbo-instruct-ab'
 
     response = None
     error = None
